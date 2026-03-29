@@ -58,5 +58,18 @@ check_cpu() {
 fi
 }
 
+check_memory() {
+	local total used percentage
+	used=$(free | awk 'NR==2 {print $3}')
+	total=$(free | awk 'NR==2 {print $2}')
+	percentage=$((($used * 100)/$total))
 
+	log "Memory usage ${percentage}% - (Used $used KBs out of $total KBs)"
+
+	if [ $percentage -ge $MEM_THRESHOLD ]; then
+		alert "Memory usage is ${percentage}% - exceeds threshold of ${MEM_THRESHOLD}%"
+fi
+}
+
+check_memory
 
