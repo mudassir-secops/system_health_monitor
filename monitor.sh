@@ -46,5 +46,17 @@ fi
 }
 
 
-check_service
+check_cpu() {
+	local usage idle
+	idle=$(top -bn1 | grep "Cpu(s)" | awk '{print $8}' | cut -d"." -f1)
+	usage=$((100-$idle))
+	
+	log "CPU usage is ${usage}%"
+
+	if [ $usage -ge $CPU_THRESHOLD ]; then
+		alert "CPU usage is ${usage}% - exceeds CPU thresold of ${CPU_THRESHOLD}%"
+fi
+}
+
+
 
