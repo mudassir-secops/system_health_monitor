@@ -27,11 +27,24 @@ check_disk() {
 	usage=$( df / | awk ' NR==2 {gsub("%",""); print $5 } ' )
 
 	log "Disk usage: ${usage}%"
-	
-	if [ $usage -ge $DISK_THRESHOLD ];
+		if [ $usage -ge $DISK_THRESHOLD ];
 then
 	alert "Disk usage is ${usage}% - exceeds disk threshold of  ${DISK_THRESHOLD}% "
 
 fi
 }
+
+
+check_service() {
+
+	if systemctl is-active --quiet nginx; 
+       	then
+		log "Service $SERVICE_NAME is running"
+	else
+		log "Service $SERVICE_NAME is not running"
+fi
+}
+
+
+check_service
 
