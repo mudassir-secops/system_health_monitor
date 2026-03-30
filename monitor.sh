@@ -77,11 +77,11 @@ fi
 check_url() {
 	local status
 
-	status=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 "$CHECK_URL")
+	status=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 "$CHECK_URL" || echo "000")
 
 	log "URL checked : HTTP $status"
 
-	if [ $status != "200" ]; then
+	if [ "$status" != "200" ]; then
 		alert "URL $CHECK_URL return HTTP $status - expected 200"
 fi
 }
@@ -91,7 +91,7 @@ check_network() {
 	
 	status=$(nslookup google.com | awk 'NR==6 {print $2}' )
 
-	if [ $status == "" ]; then
+	if [ "$status" == "" ]; then
 		alert "DNS resolution error - google.com not resolved"
 	else 
 		log "DNS resolution checked - google.com resolved"
